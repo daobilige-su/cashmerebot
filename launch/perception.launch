@@ -6,6 +6,7 @@
     <!--   rviz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cashmerebot)/rviz/perception.rviz"/>
 
+    <!--   depth map to point cloud -->
     <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
 
     <node pkg="nodelet" type="nodelet" name="nodelet_point_cloud_xyz" args="load depth_image_proc/point_cloud_xyz nodelet_manager">
@@ -13,4 +14,10 @@
         <remap from="image_rect" to="/front_depth_cam/image_raw"/>
         <remap from="points" to="/front_depth_cam/points"/>
     </node>
+
+    <!--   task manager, the clients for move base and line track -->
+    <node pkg="cashmerebot" type="task_manager.py" name="task_manager" output="screen" />
+
+    <!--   path_plan server -->
+    <node pkg="cashmerebot" type="path_plan_server.py" name="path_plan_server" output="screen" />
 </launch>

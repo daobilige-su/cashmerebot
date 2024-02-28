@@ -23,22 +23,17 @@ class path_plan_action(object):
         self._as = actionlib.SimpleActionServer(self._action_name, cashmerebot.msg.path_planAction,
                                                 execute_cb=self.execute_cb, auto_start=False)
         self._as.start()
-        # self.bridge = CvBridge()
-        self.line_sensor_data = None
-        self.meg_sensor_data_b = None
-        self.meg_sensor_sub = rospy.Subscriber("/front_depth_cam/points", PointCloud2, self.callback_pc2)
-        self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-
-    def callback_pc2(self, data):
-        self.line_sensor_data = np.array(data.data).reshape((1, -1))
 
     def execute_cb(self, goal): # 0: stand still, 1: forward; 2, backward; 3, left; 4, right;
 
-        success=False
-        move_dir = goal.target_location[0]
+        success = False
+        params = goal.params
 
         rospy.loginfo('%s: Executing, obtained goal location: (%f)' % (
-            self._action_name, goal.target_location[0]))
+            self._action_name, goal.params[0]))
+
+        # do something here
+        success = True
 
         if success == True:
             rospy.loginfo('%s: Succeeded' % self._action_name)

@@ -1,8 +1,8 @@
 # Define the goal
-float32[] target_location
+float32[] params
 ---
 # Define the result
-float32[] target_result
+float32[] path
 ---
 # Define a feedback message
-float32[] target_feedback
+float32[] feedback

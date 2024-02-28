@@ -72,8 +72,8 @@ class TaskManager:
                 # publish all zero velocity cmd
                 self.stop()
             elif task_list_cur[0] == 1:  # path plan mode, [1, x, y, theta, ...]
-                goal_pose = task_list_cur[1:4].copy()
-                self.path_plan_action(goal_pose)
+                params = task_list_cur[1:3].copy()
+                self.path_plan_action(params)
             else:
                 rospy.logerr('unknown task code.')
         else:
@@ -85,15 +85,15 @@ class TaskManager:
     # 1. move_base task: 0, stay still; 1, move forward; 2, move backward; 3, move left; 4, move right
     # 5, move forward no jump
     # 9, turn 180
-    def path_plan_action(self, move_dir):
+    def path_plan_action(self, params):
         goal = cashmerebot.msg.path_planGoal()
-        goal.target_location = [int(move_dir)]
+        goal.params = params.tolist()
 
         self.path_plan_client.send_goal(goal)
-        rospy.logerr('line_track_client: sent new goal (%f)' % (goal.target_location[0]))
+        rospy.logwarn('path_plan_client: sent new goal (%f, %f)' % (goal.params[0], goal.params[1]))
 
         self.path_plan_client.wait_for_result()
-        rospy.logerr("line_track_client: goal completed")
+        rospy.logwarn("path_plan_client: goal completed")
 
     def stop(self):
         pass
