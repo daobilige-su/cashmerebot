@@ -14,7 +14,7 @@ from visualization_msgs.msg import Marker
 import rospy
 import sys
 from std_msgs.msg import String, Float32MultiArray
-# from patrol_robot.srv import TaskList
+from cashmerebot.srv import TaskList
 from tf import transformations
 
 
@@ -26,10 +26,10 @@ class TaskManager:
         self.task_sleep_rate = rospy.Rate(10)
 
         # TaskList service to update self.task_list
-        # self.task_list_srv = rospy.Service('TaskList', TaskList, self.update_task_list)
-        # rospy.loginfo('TaskList service ready')
+        self.task_list_srv = rospy.Service('TaskList', TaskList, self.update_task_list)
+        rospy.loginfo('TaskList service ready')
 
-        # move_base and track_line clients
+        # path_plan client
         self.path_plan_client = actionlib.SimpleActionClient('path_plan', cashmerebot.msg.path_planAction)
         self.path_plan_client.wait_for_server()
         rospy.loginfo('path_plan_server connected.')
@@ -46,8 +46,7 @@ class TaskManager:
         rospy.loginfo(task_list)
         self.task_list = task_list.copy()  # copy a new duplicate, do not assign the reference
 
-        self.move_base_client.cancel_all_goals()
-        self.line_track_client.cancel_all_goals()
+        self.path_plan_client.cancel_all_goals()
 
         # rospy.sleep(0.5)
         self.stop()
@@ -67,23 +66,14 @@ class TaskManager:
                 self.task_list = None
             else:
                 self.task_list = self.task_list[1:task_num, :].copy()
-            # self.task_list_cur[0:10,:] = self.task_list_cur[1:11,:].copy()
-            # self.task_list_cur[10:11,:] = numpy.zeros((1,10)).copy()
 
             if task_list_cur[0] == 0:  # stop mode, [0, ...]
-                self.move_base_client.cancel_all_goals()
-                self.line_track_client.cancel_all_goals()
+                self.path_plan_client.cancel_all_goals()
                 # publish all zero velocity cmd
                 self.stop()
-            elif task_list_cur[0] == 1:  # move_base mode, [1, x, y, theta, ...]
+            elif task_list_cur[0] == 1:  # path plan mode, [1, x, y, theta, ...]
                 goal_pose = task_list_cur[1:4].copy()
-                self.move_base_action(goal_pose)
-            elif task_list_cur[0] == 2:  # track_line mode, [2, dir, ...]
-                move_dir = task_list_cur[1].copy()
-                self.line_track_action(move_dir)
-            elif task_list_cur[0] == 9:  # do nothing mode, wait t seconds [9, t, ...]
-                t = task_list_cur[1].copy()
-                rospy.sleep(t)
+                self.path_plan_action(goal_pose)
             else:
                 rospy.logerr('unknown task code.')
         else:
@@ -95,20 +85,18 @@ class TaskManager:
     # 1. move_base task: 0, stay still; 1, move forward; 2, move backward; 3, move left; 4, move right
     # 5, move forward no jump
     # 9, turn 180
-    def line_track_action(self, move_dir):
-        goal = patrol_robot.msg.line_trackGoal()
+    def path_plan_action(self, move_dir):
+        goal = cashmerebot.msg.path_planGoal()
         goal.target_location = [int(move_dir)]
 
-        self.line_track_client.send_goal(goal)
+        self.path_plan_client.send_goal(goal)
         rospy.logerr('line_track_client: sent new goal (%f)' % (goal.target_location[0]))
 
-        self.line_track_client.wait_for_result()
+        self.path_plan_client.wait_for_result()
         rospy.logerr("line_track_client: goal completed")
 
     def stop(self):
-        msg = Twist()
-        self.cmd_vel_pub.publish(msg)
-        return True
+        pass
 
 
 def main(args):
