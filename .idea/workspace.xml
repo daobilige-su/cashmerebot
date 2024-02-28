@@ -2,14 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80727b17-c377-486c-a297-eebd774e6353" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/launch/perception.launch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rviz/perception.rviz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/segment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/tf_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/path_plan_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/task_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/ROS.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/ROS.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coppeliasim/model.ttt" beforeDir="false" afterPath="$PROJECT_DIR$/coppeliasim/model.ttt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/launch/ur5e_moveit.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/ur5e_moveit.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/perception.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/perception.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rviz/perception.rviz" beforeDir="false" afterPath="$PROJECT_DIR$/rviz/perception.rviz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/segment.py" beforeDir="false" afterPath="$PROJECT_DIR$/action/path_plan.action" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

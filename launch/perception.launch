@@ -5,4 +5,12 @@
 
     <!--   rviz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cashmerebot)/rviz/perception.rviz"/>
+
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+
+    <node pkg="nodelet" type="nodelet" name="nodelet_point_cloud_xyz" args="load depth_image_proc/point_cloud_xyz nodelet_manager">
+        <remap from="camera_info" to="/front_depth_cam/camera_info"/>
+        <remap from="image_rect" to="/front_depth_cam/image_raw"/>
+        <remap from="points" to="/front_depth_cam/points"/>
+    </node>
 </launch>

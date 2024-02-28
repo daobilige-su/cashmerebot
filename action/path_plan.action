@@ -1,0 +1,8 @@
+# Define the goal
+float32[] target_location
+---
+# Define the result
+float32[] target_result
+---
+# Define a feedback message
+float32[] target_feedback
