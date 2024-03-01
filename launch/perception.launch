@@ -15,9 +15,12 @@
         <remap from="points" to="/front_depth_cam/points"/>
     </node>
 
+    <!--   transform pc2 from cam frame to ur5 base frame -->
+    <node pkg="cashmerebot" type="pc2_transform.py" name="pc2_transform" output="screen" />
+
     <!--   task manager, the clients for move base and line track -->
     <node pkg="cashmerebot" type="task_manager.py" name="task_manager" output="screen" />
 
     <!--   path_plan server -->
-    <node pkg="cashmerebot" type="path_plan_server.py" name="path_plan_server" output="screen" />
+<!--     <node pkg="cashmerebot" type="path_plan_server.py" name="path_plan_server" output="screen" /> -->
 </launch>
