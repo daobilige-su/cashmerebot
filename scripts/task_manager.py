@@ -95,6 +95,10 @@ class TaskManager:
         self.path_plan_client.wait_for_result()
         rospy.logwarn("path_plan_client: goal completed")
 
+        path_list = self.path_plan_client.get_result()
+        path_np = np.array(path_list.path).reshape((6,-1), order='F')
+
+
     def stop(self):
         pass
 

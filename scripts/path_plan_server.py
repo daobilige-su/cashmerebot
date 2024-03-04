@@ -31,6 +31,7 @@ class path_plan_action(object):
         self.marker_pub = rospy.Publisher("path_plan_markers", MarkerArray, queue_size=5)
 
         self.surf_dist = 0.1
+        self.lift_dist = 0.05
         self.angle_incr = 5  # deg
 
     def execute_cb(self, goal): # 0: stand still, 1: forward; 2, backward; 3, left; 4, right;
@@ -75,16 +76,16 @@ class path_plan_action(object):
         ring_center = mid_line[:, 0].copy()
         ring_center[0] = 0
         ring_center = ring_center.reshape((-1,))
-        can_pose_ypr, can_pts_num, can_pose_ypr_valid = self.plan_single_ring(cloud_ring, ring_center)
+        path_pose = self.plan_single_ring(cloud_ring, ring_center)
 
         # plot_traj(can_pose_ypr_valid[0:3, :].T, self.marker_pub, 2, 'ur5_base')
-        plot_arrows(can_pose_ypr_valid.T, self.marker_pub, 100, 'ur5_base')
+        plot_arrows(path_pose.T, self.marker_pub, 100, 'ur5_base')
+        plot_traj(path_pose[0:3, :].T, self.marker_pub, 20, 'ur5_base')
 
         # store results
-        path = np.fliplr(can_pose_ypr_valid)  # from top to bottom order
-        path_list = path.T.reshape((-1,)).tolist()
+        path_list = path_pose.T.reshape((-1,)).tolist()
 
-        self._result = path_list
+        self._result.path = path_list
 
         # return result
         success = True
@@ -100,10 +101,11 @@ class path_plan_action(object):
         angle = np.arctan2(cloud_2d[1, :]-center_2d[1], -(cloud_2d[0, :]-center_2d[0]))
         angle_deg = np.rad2deg(angle)
 
-        can_deg = range(-90, 90+self.angle_incr, self.angle_incr)
+        can_deg = range(90, -90-self.angle_incr, -self.angle_incr)
         can_num = len(can_deg)
         can_pts_num = np.zeros((1, can_num))
         can_pose_ypr = np.zeros((6, can_num))
+        can_lift_pose_ypr = np.zeros((6, can_num))
 
         for idx in range(can_num):
             deg = can_deg[idx]
@@ -120,10 +122,14 @@ class path_plan_action(object):
             deg_cloud_pts_mean = np.mean(deg_cloud_pts, 1)
             dist_mean = np.sqrt(np.sum(np.power(center_2d - deg_cloud_pts_mean, 2)))
             dist_arm = dist_mean+self.surf_dist
+            dist_arm_lift = dist_mean+self.surf_dist+self.lift_dist
 
             deg_cloud_pose = np.array([0, center_2d[0]-dist_arm*np.cos(np.deg2rad(deg)), center_2d[1]+dist_arm*np.sin(np.deg2rad(deg)), \
                                        np.pi/2, np.deg2rad(deg), 0]).reshape((6,1))
-            can_pose_ypr[:,idx:idx+1] = deg_cloud_pose.copy()
+            deg_cloud_lift_pose = np.array([0, center_2d[0] - dist_arm_lift * np.cos(np.deg2rad(deg)), center_2d[1] + dist_arm_lift * np.sin(np.deg2rad(deg)), \
+                                            np.pi / 2, np.deg2rad(deg), 0]).reshape((6, 1))
+            can_pose_ypr[:, idx:idx + 1] = deg_cloud_pose.copy()
+            can_lift_pose_ypr[:, idx:idx + 1] = deg_cloud_lift_pose.copy()
 
         # only take the continuous section in the middle part
         can_num_half = int((can_num+1)/2)
@@ -143,10 +149,12 @@ class path_plan_action(object):
             else:
                 break
 
-        can_pose_ypr_valid = can_pose_ypr[:, min_idx:max_idx+1].copy()
+        can_pose_ypr_valid = can_pose_ypr[:, min_idx:max_idx + 1].copy()
+        can_lift_pose_ypr_valid = can_lift_pose_ypr[:, min_idx:max_idx + 1].copy()
 
+        path_pose = np.block([[can_lift_pose_ypr_valid], [can_pose_ypr_valid]]).reshape((6,-1), order='F')
 
-        return can_pose_ypr, can_pts_num, can_pose_ypr_valid
+        return path_pose
 
 
 
