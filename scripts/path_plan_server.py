@@ -69,21 +69,24 @@ class path_plan_action(object):
         cloud_ring = cloud_ring[:, cloud_ring[0, :] > -0.05]
         cloud_ring = cloud_ring[:, cloud_ring[0, :] < 0.05]
 
-        plot_pts(cloud_ring.T, self.marker_pub, 'ur5_base')
-        plot_traj(mid_line.T, self.marker_pub, 'ur5_base')
+        plot_pts(cloud_ring.T, self.marker_pub, 0, 'ur5_base')
+        plot_traj(mid_line.T, self.marker_pub, 10, 'ur5_base', 0.02)
 
-        ring_center = mid_line[:, 0]
+        ring_center = mid_line[:, 0].copy()
         ring_center[0] = 0
         ring_center = ring_center.reshape((-1,))
-        can_pose_ypr, can_pts_num = self.plan_single_ring(cloud_ring, ring_center)
+        can_pose_ypr, can_pts_num, can_pose_ypr_valid = self.plan_single_ring(cloud_ring, ring_center)
 
-        plot_traj(can_pose_ypr[0:3, :].T, self.marker_pub, 'ur5_base')
+        # plot_traj(can_pose_ypr_valid[0:3, :].T, self.marker_pub, 2, 'ur5_base')
+        plot_arrows(can_pose_ypr_valid.T, self.marker_pub, 100, 'ur5_base')
 
+        # store results
+        path = np.fliplr(can_pose_ypr_valid)  # from top to bottom order
+        path_list = path.T.reshape((-1,)).tolist()
 
+        self._result = path_list
 
-
-
-
+        # return result
         success = True
 
         if success == True:
@@ -91,8 +94,8 @@ class path_plan_action(object):
             self._as.set_succeeded(self._result)
 
     def plan_single_ring(self, cloud, center):
-        cloud_2d = cloud[1:3, :]
-        center_2d = center[1:3]
+        cloud_2d = cloud[1:3, :].copy()
+        center_2d = center[1:3].copy()
 
         angle = np.arctan2(cloud_2d[1, :]-center_2d[1], -(cloud_2d[0, :]-center_2d[0]))
         angle_deg = np.rad2deg(angle)
@@ -106,7 +109,7 @@ class path_plan_action(object):
             deg = can_deg[idx]
 
             deg_cloud_idx = (abs(angle_deg-deg)<(self.angle_incr/2.0))
-            deg_cloud_pts = cloud_2d[:, deg_cloud_idx]
+            deg_cloud_pts = cloud_2d[:, deg_cloud_idx].copy()
 
             deg_cloud_pts_num = deg_cloud_pts.shape[1]
             can_pts_num[0, idx] = deg_cloud_pts_num
@@ -120,9 +123,30 @@ class path_plan_action(object):
 
             deg_cloud_pose = np.array([0, center_2d[0]-dist_arm*np.cos(np.deg2rad(deg)), center_2d[1]+dist_arm*np.sin(np.deg2rad(deg)), \
                                        np.pi/2, np.deg2rad(deg), 0]).reshape((6,1))
-            can_pose_ypr[:,idx:idx+1] = deg_cloud_pose
+            can_pose_ypr[:,idx:idx+1] = deg_cloud_pose.copy()
 
-        return can_pose_ypr, can_pts_num
+        # only take the continuous section in the middle part
+        can_num_half = int((can_num+1)/2)
+
+        min_idx = can_num_half
+        for idx in range(can_num_half):
+            idx_in_vec = can_num_half-idx
+            if can_pts_num[0, idx_in_vec]>5:
+                min_idx = idx_in_vec
+            else:
+                break
+        max_idx = can_num_half
+        for idx in range(can_num_half):
+            idx_in_vec = can_num_half+idx
+            if can_pts_num[0, idx_in_vec]>5:
+                max_idx = idx_in_vec
+            else:
+                break
+
+        can_pose_ypr_valid = can_pose_ypr[:, min_idx:max_idx+1].copy()
+
+
+        return can_pose_ypr, can_pts_num, can_pose_ypr_valid
 
 
 
