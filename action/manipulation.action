@@ -1,0 +1,8 @@
+# Define the goal
+float32[] path
+---
+# Define the result
+float32[] success
+---
+# Define a feedback message
+float32[] progress

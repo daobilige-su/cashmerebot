@@ -34,6 +34,11 @@ class TaskManager:
         self.path_plan_client.wait_for_server()
         rospy.loginfo('path_plan_server connected.')
 
+        # manipulation client
+        self.manipulation_client = actionlib.SimpleActionClient('manipulation', cashmerebot.msg.manipulationAction)
+        self.manipulation_client.wait_for_server()
+        rospy.loginfo('manipulation_server connected.')
+
         # ready to start
         rospy.logwarn('Going to Start after 3s ...')
         rospy.sleep(3)
@@ -73,7 +78,9 @@ class TaskManager:
                 self.stop()
             elif task_list_cur[0] == 1:  # path plan mode, [1, x, y, theta, ...]
                 params = task_list_cur[1:3].copy()
-                self.path_plan_action(params)
+                path_np = self.path_plan_action(params)
+
+                self.manipulation_action(path_np)
             else:
                 rospy.logerr('unknown task code.')
         else:
@@ -97,6 +104,11 @@ class TaskManager:
 
         path_list = self.path_plan_client.get_result()
         path_np = np.array(path_list.path).reshape((6,-1), order='F')
+
+        return path_np
+
+    def manipulation_action(self, path_np):
+        pass
 
 
     def stop(self):
