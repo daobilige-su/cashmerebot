@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80727b17-c377-486c-a297-eebd774e6353" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/action/manipulation.action" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/launch/main.launch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/manipulation_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/task_manager_perception_only.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/ROS.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/ROS.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coppeliasim/model.ttt" beforeDir="false" afterPath="$PROJECT_DIR$/coppeliasim/model.ttt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/perception.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/perception.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/ur5e_moveit.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/ur5e_moveit.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/path_plan_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/path_plan_server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/task_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/task_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/tf_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/tf_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,12 +37,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/action" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/action" />
       <recent name="$PROJECT_DIR$/scripts" />
+      <recent name="$PROJECT_DIR$/action" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -162,7 +168,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/path_plan_server.py</url>
-          <line>90</line>
+          <line>91</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

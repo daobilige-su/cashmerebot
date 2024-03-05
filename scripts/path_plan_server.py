@@ -27,12 +27,13 @@ class path_plan_action(object):
         self._as.start()
 
         # params:
-        self.pc_roi = np.array([[-1, 1], [0.2, 0.8], [0, 1]])
+        self.pc_roi = np.array([[0.2, 0.8], [-1, 1], [0, 1]])
         self.marker_pub = rospy.Publisher("path_plan_markers", MarkerArray, queue_size=5)
 
         self.surf_dist = 0.1
         self.lift_dist = 0.05
         self.angle_incr = 5  # deg
+        self.ee_base_y_shift = 0.11
 
     def execute_cb(self, goal): # 0: stand still, 1: forward; 2, backward; 3, left; 4, right;
 
@@ -62,19 +63,19 @@ class path_plan_action(object):
         cloud_seg = cloud_roi.copy()
 
         # extract mid line in 2 points
-        mid_line = np.array([[-0.9, 0.5],[0.5, 0.5], [0.3, 0.3]])
+        mid_line = np.array([[0.5, 0.5], [-0.9, 0.9], [0.4, 0.4]])
 
 
         # path plan
         cloud_ring = cloud_seg.copy()
-        cloud_ring = cloud_ring[:, cloud_ring[0, :] > -0.05]
-        cloud_ring = cloud_ring[:, cloud_ring[0, :] < 0.05]
+        cloud_ring = cloud_ring[:, cloud_ring[1, :] > self.ee_base_y_shift-0.05]
+        cloud_ring = cloud_ring[:, cloud_ring[1, :] < self.ee_base_y_shift+0.05]
 
         plot_pts(cloud_ring.T, self.marker_pub, 0, 'ur5_base')
         plot_traj(mid_line.T, self.marker_pub, 10, 'ur5_base', 0.02)
 
         ring_center = mid_line[:, 0].copy()
-        ring_center[0] = 0
+        ring_center[1] = self.ee_base_y_shift
         ring_center = ring_center.reshape((-1,))
         path_pose = self.plan_single_ring(cloud_ring, ring_center)
 
@@ -95,8 +96,8 @@ class path_plan_action(object):
             self._as.set_succeeded(self._result)
 
     def plan_single_ring(self, cloud, center):
-        cloud_2d = cloud[1:3, :].copy()
-        center_2d = center[1:3].copy()
+        cloud_2d = cloud[[0, 2], :].copy()
+        center_2d = center[[0, 2]].copy()
 
         angle = np.arctan2(cloud_2d[1, :]-center_2d[1], -(cloud_2d[0, :]-center_2d[0]))
         angle_deg = np.rad2deg(angle)
@@ -124,10 +125,10 @@ class path_plan_action(object):
             dist_arm = dist_mean+self.surf_dist
             dist_arm_lift = dist_mean+self.surf_dist+self.lift_dist
 
-            deg_cloud_pose = np.array([0, center_2d[0]-dist_arm*np.cos(np.deg2rad(deg)), center_2d[1]+dist_arm*np.sin(np.deg2rad(deg)), \
-                                       np.pi/2, np.deg2rad(deg), 0]).reshape((6,1))
-            deg_cloud_lift_pose = np.array([0, center_2d[0] - dist_arm_lift * np.cos(np.deg2rad(deg)), center_2d[1] + dist_arm_lift * np.sin(np.deg2rad(deg)), \
-                                            np.pi / 2, np.deg2rad(deg), 0]).reshape((6, 1))
+            deg_cloud_pose = np.array([center_2d[0]-dist_arm*np.cos(np.deg2rad(deg)), center[1], center_2d[1]+dist_arm*np.sin(np.deg2rad(deg)), \
+                                       0, np.deg2rad(deg), 0]).reshape((6,1))
+            deg_cloud_lift_pose = np.array([center_2d[0] - dist_arm_lift * np.cos(np.deg2rad(deg)), center[1], center_2d[1] + dist_arm_lift * np.sin(np.deg2rad(deg)), \
+                                            0, np.deg2rad(deg), 0]).reshape((6, 1))
             can_pose_ypr[:, idx:idx + 1] = deg_cloud_pose.copy()
             can_lift_pose_ypr[:, idx:idx + 1] = deg_cloud_lift_pose.copy()
 

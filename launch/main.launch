@@ -1,0 +1,20 @@
+<launch>
+    <!--   task manager, the clients for move base and line track -->
+    <node pkg="cashmerebot" type="task_manager.py" name="task_manager" output="screen"/>
+
+    <!--   perception -->
+    <include file="$(find cashmerebot)/launch/perception.launch">
+        <arg name="run_perception_only" value="false"/>
+    </include>
+
+    <!--   manipulation server -->
+    <node pkg="cashmerebot" type="manipulation_server.py" name="manipulation_server" output="screen" />
+
+    <!--   ur5e moveit -->
+    <include file="$(find cashmerebot)/launch/ur5e_moveit.launch">
+        <arg name="use_ur5e_moveit_rviz" value="false"/>
+    </include>
+
+    <!--   rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cashmerebot)/rviz/task.rviz"/>
+</launch>

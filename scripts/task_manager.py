@@ -108,8 +108,14 @@ class TaskManager:
         return path_np
 
     def manipulation_action(self, path_np):
-        pass
+        goal = cashmerebot.msg.manipulationGoal()
+        goal.path = path_np.T.reshape((-1,)).tolist()
 
+        self.manipulation_client.send_goal(goal)
+        rospy.logwarn('manipulation_client: sent new path')
+
+        self.manipulation_client.wait_for_result()
+        rospy.logwarn("manipulation_client: goal completed")
 
     def stop(self):
         pass

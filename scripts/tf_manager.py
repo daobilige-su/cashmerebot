@@ -15,7 +15,7 @@ class TFManager:
                               child_frame, parent_frame)
 
     def send_tf(self):
-        self.tf_broadcast([0.200000, -0.500000, 0.385350], [0.707107, 0.000000, 0.000000, -0.707107],
+        self.tf_broadcast([-0.500000, -0.200000, 0.385350], [0.500000, -0.500000, 0.500000, -0.500000],
                           'front_depth_cam', 'ur5_base')
 
 
