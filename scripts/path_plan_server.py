@@ -63,7 +63,7 @@ class path_plan_action(object):
         cloud_seg = cloud_roi.copy()
 
         # extract mid line in 2 points
-        mid_line = np.array([[0.5, 0.5], [-0.9, 0.9], [0.4, 0.4]])
+        mid_line = np.array([[0.7, 0.7], [-0.9, 0.9], [0.4, 0.4]])
 
 
         # path plan
