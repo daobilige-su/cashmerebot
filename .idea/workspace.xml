@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80727b17-c377-486c-a297-eebd774e6353" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/manipulation_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/conv_cmd_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/conv_cmd_server_client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srv/ConvCmd.srv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/ROS.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/ROS.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/coppeliasim/model.ttt" beforeDir="false" afterPath="$PROJECT_DIR$/coppeliasim/model.ttt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rviz/task.rviz" beforeDir="false" afterPath="$PROJECT_DIR$/rviz/task.rviz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/main.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/main.launch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/manipulation_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/manipulation_server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/path_plan_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/path_plan_server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/task_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/task_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/task_manager_srv_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/task_manager_srv_client.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,11 +37,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/manipulation_server.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/conv_cmd_server_client.py" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/scripts" />
+      <recent name="$PROJECT_DIR$/srv" />
       <recent name="$PROJECT_DIR$/action" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -46,6 +50,48 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.manipulation_server">
+    <configuration name="conv_cmd_server" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="cashmerebot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python3.8" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/conv_cmd_server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="conv_cmd_server_client" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="cashmerebot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python3.8" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/conv_cmd_server_client.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="manipulation_server" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="cashmerebot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,6 +220,8 @@
     </configuration>
     <list>
       <item itemvalue="Python.manipulation_server" />
+      <item itemvalue="Python.conv_cmd_server" />
+      <item itemvalue="Python.conv_cmd_server_client" />
       <item itemvalue="Python.manipulation_test" />
       <item itemvalue="Python.path_plan_server" />
       <item itemvalue="Python.pc2_transform" />
@@ -219,8 +267,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/manipulation_server.py</url>
-          <line>60</line>
+          <line>64</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/manipulation_server.py</url>
+          <line>138</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

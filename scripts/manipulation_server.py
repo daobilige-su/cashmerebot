@@ -8,6 +8,7 @@ import actionlib
 from plot_marker import *
 from transform_tools import *
 
+from geometry_msgs.msg import Pose
 import sys
 import moveit_commander
 from moveit_commander import MoveGroupCommander
@@ -49,6 +50,9 @@ class manipulation_action(object):
         self.home_pose = np.deg2rad(np.array([0, -150, 60, 90, 90, 0])).tolist()
         self.pre_exec_pose = np.deg2rad(np.array([0, -90, 60, 300, 270, 0])).tolist()
 
+        # turn head z
+        self.turn_head_z = 0.45
+
         # go to home
         self.arm.set_joint_value_target(self.home_pose)
         # 控制机械臂完成运动
@@ -81,6 +85,7 @@ class manipulation_action(object):
         # rospy.sleep(1)
         self.run_joint_target_one_by_one(self.pre_exec_pose)
 
+        head_turned = False
         for n in range(path_pose_num):
             pose = path_np[:, n]
 
@@ -88,7 +93,13 @@ class manipulation_action(object):
             tool_m = m @ transform_trans_ypr_to_matrix(np.array([0, 0, 0, np.pi/2, 0, np.pi/2]))
             tool_pose_quat = transform_matrix_to_trans_quat(tool_m).reshape((-1,))
 
-            tar_pose = deepcopy(start_pose)
+            # if the end-effector go below a threshold self.turn_head_z and it's the preparing pose,
+            # then turn head for better posing
+            if (tool_pose_quat[2]<self.turn_head_z) and (n%2==0) and (not head_turned):
+                self.turn_head(tool_pose_quat)
+                head_turned = True
+
+            tar_pose = Pose()
             tar_pose.position.x = tool_pose_quat[0]
             tar_pose.position.y = tool_pose_quat[1]
             tar_pose.position.z = tool_pose_quat[2]
@@ -102,6 +113,8 @@ class manipulation_action(object):
             # self.arm.execute()
             self.arm.go()
             rospy.sleep(1)
+
+        self.run_joint_target_one_by_one(self.home_pose)
 
 
         # return result
@@ -119,7 +132,61 @@ class manipulation_action(object):
             self.arm.set_joint_value_target(joint_target_step)
             # 控制机械臂完成运动
             self.arm.go()
-            rospy.sleep(1)
+            rospy.sleep(0.1)
+
+    def turn_head(self, tool_pose_quat):
+        # go to target pose
+        tar_pose = Pose()
+        tar_pose.position.x = tool_pose_quat[0]
+        tar_pose.position.y = tool_pose_quat[1]
+        tar_pose.position.z = tool_pose_quat[2]
+        tar_pose.orientation.x = tool_pose_quat[3]
+        tar_pose.orientation.y = tool_pose_quat[4]
+        tar_pose.orientation.z = tool_pose_quat[5]
+        tar_pose.orientation.w = tool_pose_quat[6]
+
+        self.arm.set_pose_target(tar_pose)
+        # self.arm.plan()
+        # self.arm.execute()
+        self.arm.go()
+        rospy.sleep(1)
+
+        # turn head
+        joint_target_step = self.arm.get_current_joint_values()
+
+        joint_target_step[1] = joint_target_step[1] - np.deg2rad(10)
+        # joint_target_step[2] = joint_target_step[2] + np.deg2rad(10)
+
+        if joint_target_step[3] < 0:
+            joint_target_step[3] = joint_target_step[3] + np.deg2rad(180)
+        else:
+            joint_target_step[3] = joint_target_step[3] - np.deg2rad(180)
+        if joint_target_step[4] < 0:
+            joint_target_step[4] = joint_target_step[4] + np.deg2rad(180)
+        else:
+            joint_target_step[4] = joint_target_step[4] - np.deg2rad(180)
+        if joint_target_step[5] < 0:
+            joint_target_step[5] = joint_target_step[5] + np.deg2rad(180)
+        else:
+            joint_target_step[5] = joint_target_step[5] - np.deg2rad(180)
+
+        self.run_joint_target_one_by_one(joint_target_step)
+
+        # go to target pose again
+        tar_pose = Pose()
+        tar_pose.position.x = tool_pose_quat[0]
+        tar_pose.position.y = tool_pose_quat[1]
+        tar_pose.position.z = tool_pose_quat[2]
+        tar_pose.orientation.x = tool_pose_quat[3]
+        tar_pose.orientation.y = tool_pose_quat[4]
+        tar_pose.orientation.z = tool_pose_quat[5]
+        tar_pose.orientation.w = tool_pose_quat[6]
+
+        self.arm.set_pose_target(tar_pose)
+        # self.arm.plan()
+        # self.arm.execute()
+        self.arm.go()
+        rospy.sleep(1)
 
 
 

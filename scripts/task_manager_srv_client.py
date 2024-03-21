@@ -13,9 +13,10 @@ import math
 
 pi = math.pi
 
-# task1 = numpy.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
-task1 = numpy.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+task1 = numpy.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [2, 0.2, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+# task1 = numpy.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
 
 def send_task_list(tasks, request, msg):

@@ -14,7 +14,7 @@ from visualization_msgs.msg import Marker
 import rospy
 import sys
 from std_msgs.msg import String, Float32MultiArray
-from cashmerebot.srv import TaskList
+from cashmerebot.srv import TaskList, ConvCmd
 from tf import transformations
 
 
@@ -28,6 +28,11 @@ class TaskManager:
         # TaskList service to update self.task_list
         self.task_list_srv = rospy.Service('TaskList', TaskList, self.update_task_list)
         rospy.loginfo('TaskList service ready')
+
+        # sending conveyor position cmd
+        rospy.wait_for_service('ConvCmd')
+        rospy.loginfo('ConvCmd service connected.')
+        self.conv_cmd_request = rospy.ServiceProxy('ConvCmd', ConvCmd)
 
         # path_plan client
         self.path_plan_client = actionlib.SimpleActionClient('path_plan', cashmerebot.msg.path_planAction)
@@ -81,6 +86,8 @@ class TaskManager:
                 path_np = self.path_plan_action(params)
 
                 self.manipulation_action(path_np)
+            elif task_list_cur[0] == 2:  # conveyor motion mode, [2, pos, ...]
+                self.conveyor_motion_request(task_list_cur[1])
             else:
                 rospy.logerr('unknown task code.')
         else:
@@ -119,6 +126,14 @@ class TaskManager:
 
     def stop(self):
         pass
+
+    def conveyor_motion_request(self, pos):
+        msg = Float32MultiArray()
+        msg.data = [pos]
+
+        rospy.loginfo('send ConvCmd request: ')
+        resp = self.conv_cmd_request(msg)
+        rospy.loginfo('response is: %s' % (resp))
 
 
 def main(args):

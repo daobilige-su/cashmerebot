@@ -10,6 +10,9 @@
     <!--   manipulation server -->
     <node pkg="cashmerebot" type="manipulation_server.py" name="manipulation_server" output="screen" />
 
+    <!--   conveyor motion server -->
+    <node pkg="cashmerebot" type="conv_cmd_server.py" name="conv_cmd_server" output="screen" />
+
     <!--   ur5e moveit -->
     <include file="$(find cashmerebot)/launch/ur5e_moveit.launch">
         <arg name="use_ur5e_moveit_rviz" value="false"/>
