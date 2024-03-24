@@ -13,6 +13,9 @@
     <node pkg="nodelet" type="nodelet" name="nodelet_point_cloud_xyz" args="load depth_image_proc/point_cloud_xyz nodelet_manager">
         <remap from="camera_info" to="/front_depth_cam/camera_info"/>
         <remap from="image_rect" to="/front_depth_cam/image_raw"/>
+<!--         moveit mesh_filter is not working properly -->
+<!--         <remap from="camera_info" to="/filtered/camera_info"/> -->
+<!--         <remap from="image_rect" to="/filtered/depth"/> -->
         <remap from="points" to="/front_depth_cam/points"/>
     </node>
 
