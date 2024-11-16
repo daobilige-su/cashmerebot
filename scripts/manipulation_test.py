@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''使用 MoveIt! 进行笛卡尔空间运动规划和控制的完整示例'''
+
 import rospy, sys
 import moveit_commander
 from moveit_commander import MoveGroupCommander
 from geometry_msgs.msg import Pose
 from copy import deepcopy
-
 
 class MoveItCartesianDemo:
     def __init__(self):
@@ -39,7 +40,7 @@ class MoveItCartesianDemo:
         # arm.set_named_target('forward')
         # arm.go()
 
-        # 获取当前位姿数据最为机械臂运动的起始位姿
+        # 获取当前位姿数据作为机械臂运动的起始位姿
         start_pose = arm.get_current_pose(end_effector_link).pose
 
         # 初始化路点列表
@@ -63,6 +64,7 @@ class MoveItCartesianDemo:
             rospy.sleep(1)
 
         # 设置第三个路点数据，并加入路点列表
+        # 第三个路店向前运动0.05米，向左运动0.15米，向下运动0.15米
         wpose.position.x += 0.05
         wpose.position.y += 0.15
         wpose.position.z -= 0.15
@@ -91,6 +93,7 @@ class MoveItCartesianDemo:
             arm.set_start_state_to_current_state()
 
             # 尝试规划一条笛卡尔空间下的路径，依次通过所有路点
+            # 尝试直到路径规划成功或达到最大尝试次数
             while fraction < 1.0 and attempts < maxtries:
                 (plan, fraction) = arm.compute_cartesian_path(
                     waypoints,  # waypoint poses，路点列表
@@ -115,7 +118,7 @@ class MoveItCartesianDemo:
                 rospy.loginfo("Path planning failed with only " + str(fraction) + " success after " + str(
                     maxtries) + " attempts.")
 
-                # 控制机械臂回到初始化位置
+        # 控制机械臂回到初始化位置
         arm.set_named_target('home')
         arm.go()
         rospy.sleep(1)
@@ -123,7 +126,6 @@ class MoveItCartesianDemo:
         # 关闭并退出moveit
         moveit_commander.roscpp_shutdown()
         moveit_commander.os._exit(0)
-
 
 if __name__ == "__main__":
     try:

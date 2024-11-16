@@ -13,10 +13,16 @@
     <!--   conveyor motion server -->
     <node pkg="cashmerebot" type="conv_cmd_server.py" name="conv_cmd_server" output="screen" />
 
-    <!--   ur5e moveit -->
+    <!--   flase  ur5e moveit -->
     <include file="$(find cashmerebot)/launch/ur5e_moveit.launch">
         <arg name="use_ur5e_moveit_rviz" value="false"/>
     </include>
+
+<!--    &lt;!&ndash;  true   ur5e moveit &ndash;&gt;-->
+<!--    <include file="$(find ur5e_moveit_config)/launch/move_group.launch">-->
+<!--        <arg name="debug" default="false" />-->
+<!--    </include>-->
+
 
 <!--     moveit mesh_filter DepthSelfFiltering is not properly handling the urdf file for all links poses. when showing  -->
 <!--     filtered/model, links poses of collision links in urdf are all with wrong orientation !!! -->
@@ -28,5 +34,5 @@
 <!--     </node> -->
 
     <!--   rviz -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cashmerebot)/rviz/task.rviz"/>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find cashmerebot)/rviz/main.rviz"/>
 </launch>
