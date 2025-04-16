@@ -36,7 +36,7 @@ class path_plan_action(object):
         self.pc_roi = np.array([[0.2, 0.8], [-1, 1], [0, 1]])
         # 创建了一个ROS发布者，用于发布MarkerArray消息类型，通常用于在ROS的rviz工具中显示标记
         self.marker_pub = rospy.Publisher("path_plan_markers", MarkerArray, queue_size=5)
-        self.surf_dist = 0.15   # 直线移动：定义机器人在水平面上的距离增量
+        self.surf_dist = 0.05   # 直线移动：定义机器人在水平面上的距离增量
         self.lift_dist = 0.05  # 提升或下降：定义机器人在垂直面上降的距离增量
         self.angle_incr = 5    # 旋转：定义机器人的角度增量
         self.ee_base_y_shift = 0.11  # 用于定义末端执行器相对于基座在y轴方向上的偏移
@@ -72,7 +72,7 @@ class path_plan_action(object):
         cloud_seg = cloud_roi.copy()
 
         # 定义一个中线mid_line，用于路径规划的参考线
-        mid_line = np.array([[0.7, 0.7], [-0.9, 0.9], [0.4, 0.4]])
+        mid_line = np.array([[0.63, 0.63], [-0.9, 0.9], [0.4, 0.4]])
 
         # 复制cloud_seg数组，用于后续的路径规划
         cloud_ring = cloud_seg.copy()

@@ -31,6 +31,9 @@ class TFManager:
         # 定义了名为 base_link 的坐标系相对于其父坐标系 ur5_base 的位置和方向
         self.tf_broadcast([0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0],
                           'base_link', 'ur5_base')
+        # 定义了名为 tool_link 的坐标系相对于其父坐标系 tool0 的位置和方向
+        self.tf_broadcast([0.0, 0.06, 0.08], [0.0, 0.0, 0.0, 1.0],
+                          'tool_link', 'tool0')
 
 def main(args):
     # 初始化一个名为 tf_manager_node 的ROS节点

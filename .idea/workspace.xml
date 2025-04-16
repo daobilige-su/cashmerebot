@@ -4,6 +4,10 @@
     <list default="true" id="80727b17-c377-486c-a297-eebd774e6353" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/libraries/ROS.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/ROS.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coppeliasim/model_v2.ttt" beforeDir="false" afterPath="$PROJECT_DIR$/coppeliasim/model_v2.ttt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/manipulation_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/manipulation_server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/path_plan_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/path_plan_server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/tf_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/tf_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +44,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.manipulation_server">
+  <component name="RunManager" selected="Python.task_manager_srv_client">
     <configuration name="conv_cmd_server" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="cashmerebot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -248,22 +252,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/path_plan_server.py</url>
-          <line>91</line>
+          <line>107</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/manipulation_test.py</url>
-          <line>93</line>
+          <line>96</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/manipulation_server.py</url>
-          <line>65</line>
+          <line>66</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/manipulation_server.py</url>
-          <line>139</line>
+          <line>162</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>

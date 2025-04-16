@@ -102,14 +102,15 @@ class manipulation_action(object):
             # 将路径点的位置和姿态（以欧拉角YPR表示）转换为旋转矩阵
             m = transform_trans_ypr_to_matrix(pose)
             # 通过矩阵乘法将工具的局部坐标系变换到全局坐标系
-            tool_m = m @ transform_trans_ypr_to_matrix(np.array([0, 0, 0, np.pi / 2, 0, np.pi / 2]))
+            tool_m = m @ transform_trans_ypr_to_matrix(np.array([0, 0, 0, np.pi / 2, 0, np.pi / 2])) @ \
+                np.linalg.pinv(transform_trans_ypr_to_matrix(np.array([0, 0.06, 0.08, 0, 0, 0])))
             # 将旋转矩阵转换为四元数,将转换得到的四元数数组调整为一维数组
             tool_pose_quat = transform_matrix_to_trans_quat(tool_m).reshape((-1,))
 
             # 如果末端执行器的高度低于某个阈值，并且当前是偶数编号的路径点，且头部尚未转动，则执行头部转动动作
-            if (tool_pose_quat[2] < self.turn_head_z) and (n % 2 == 0) and (not head_turned):
-                self.turn_head(tool_pose_quat)  # 调用 turn_head 函数来转动头部
-                head_turned = True  # 表示头部已经转动
+            # if (tool_pose_quat[2] < self.turn_head_z) and (n % 2 == 0) and (not head_turned):
+            #     self.turn_head(tool_pose_quat)  # 调用 turn_head 函数来转动头部
+            #     head_turned = True  # 表示头部已经转动
 
             ## 设置目标姿态
             #  创建一个 Pose 对象 tar_pose
